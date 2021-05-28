@@ -18,11 +18,24 @@ struct pila{
 	char hacia[20];
 	int dist;
 } pila_rt[MAX]; // pila de rutas de vuelos
+void inicia();
+void ruta(char *hacia);
+int unidas (char *desde, char *hacia);
+int encuentra(char *desde, char *cualquier_lugar);
+void hay_vuelo(char *desde, char *hacia);
+void declara_vuelo(char *desde, char *hacia, int dist);
+void mete_pila(char *desde, char *hacia, int dist);
+void saca_pila(char *desde, char *hacia, int *dist);
 
 int main(void) {
-	char desde[20], hacia[20];
-
   printf("Hello World\n");
+	char desde[20], hacia[20];
+	printf("Desde? = ");
+	gets(desde);
+	printf("Hacia? = ");
+	gets(hacia);
+	hay_vuelo(desde,hacia);
+	ruta(hacia);
   return 0;
 }
 //Colocar data dentro de la BD vuelos
@@ -42,7 +55,7 @@ void inicia(){
 	declara_vuelo("Panama", "Cocle", 1000);
 	declara_vuelo("Cocle", "Veraguas", 1000);
 	declara_vuelo("Panama", "Colon", 800);
-	declara_vuelo("Panamá", "Veraguas", 1900);
+	declara_vuelo("Panama", "Veraguas", 1900);
 	declara_vuelo("Colon", "Bocas del Toro", 1500);
 	declara_vuelo("Colon", "Chiriqui", 1800);
 	declara_vuelo("Colon", "Cocle", 500);
@@ -72,7 +85,7 @@ int unidas (char *desde, char *hacia){
 		if (!strcmp(vuelos[t].desde,desde) && !strcmp(vuelos[t].hacia,hacia))
 			return vuelos[t].distancia;
 	}
-return 0;
+	return 0;
 } /* no encontrado */
 /* DADO UN DESDE, ENCUENTRA CUALQUIER_LUGAR */
 int encuentra(char *desde, char *cualquier_lugar){
