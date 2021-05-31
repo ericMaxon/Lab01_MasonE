@@ -32,7 +32,6 @@ int main(void) {
 	char desde[20], hacia[20];
 	
 	inicia();
-	printf("Post ult %d \n", pos_ult);
 
 	printf("Desde? = ");
 	gets(desde);
@@ -40,8 +39,6 @@ int main(void) {
 	gets(hacia);
 
 	hay_vuelo(desde,hacia);
-	printf("Post ult %d \n", pos_ult);
-	printf("Cabeza Pila %d\n",cabeza_pila);
 	ruta(hacia);
 	
   return 0;
@@ -78,7 +75,7 @@ void ruta(char *hacia){
 	int t = 0;
 	while(t<cabeza_pila) {
 		printf ("%s hacia ", pila_rt[t].desde);
-		dist+=pila_rt[t].dist;
+		dist += pila_rt[t].dist;
 		t++;
 	}
 	printf("%s\n", hacia);
@@ -99,7 +96,6 @@ int unidas (char *desde, char *hacia){
 int encuentra(char *desde, char *cualquier_lugar){
 	encuentra_pos = 0;
 	while( encuentra_pos < pos_ult ){
-		printf("Encuentra %d pos ultima %d\n", encuentra_pos, pos_ult);
 		if(!strcmp(vuelos[encuentra_pos].desde, desde)&& !vuelos[encuentra_pos].visitado){
 			strcpy(cualquier_lugar, vuelos[encuentra_pos].hacia);
 			vuelos[encuentra_pos].visitado = 1;
@@ -113,23 +109,19 @@ int encuentra(char *desde, char *cualquier_lugar){
 void hay_vuelo(char *desde, char *hacia){
 	int d, dist;
 	char cualquier_lugar[20];
-	if(d == unidas(desde, hacia)){
-		printf("entre por union\n");
+	if((d = unidas(desde, hacia))){
 		mete_pila(desde, hacia, d);
 		return;
 	}
-	if( dist == encuentra(desde, cualquier_lugar)){
-		printf("entre por distancia\n");
-		mete_pila(desde, hacia, d);
+	if((dist = encuentra(desde, cualquier_lugar))){
+		mete_pila(desde, hacia, dist);
 		hay_vuelo(cualquier_lugar, hacia);
 	}
 	else 
 		if (cabeza_pila>0){
-		printf("entre por cabeza pila\n");
 		saca_pila(desde, hacia, &dist);
 		hay_vuelo(desde, hacia);
 	}
-		printf("No hay vuelo\n");
 }
 //Rutinas de pila
 void mete_pila(char *desde, char *hacia, int dist){
@@ -138,13 +130,11 @@ void mete_pila(char *desde, char *hacia, int dist){
 		strcpy(pila_rt[cabeza_pila].hacia, hacia);
 		pila_rt[cabeza_pila].dist = dist;
 		cabeza_pila++;
-		printf("Mete pila cabeza pila %d", cabeza_pila);
 	}
 	else printf("Pila llena \n");
 }
 
 void saca_pila(char *desde, char *hacia, int *dist){
-	printf("Saca pila cabeza pila %d", cabeza_pila);
 	if (cabeza_pila > 0){
 		cabeza_pila--;
 		strcpy(desde, pila_rt[cabeza_pila].desde);
