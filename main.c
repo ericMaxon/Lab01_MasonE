@@ -30,16 +30,18 @@ void saca_pila(char *desde, char *hacia, int *dist);
 
 int main(void) {
 	char desde[20], hacia[20];
+	
+	inicia();
+	printf("Post ult %d \n", pos_ult);
 
 	printf("Desde? = ");
 	gets(desde);
 	printf("Hacia? = ");
 	gets(hacia);
 
-	inicia();
-	printf("Post ult %d \n", pos_ult);
 	hay_vuelo(desde,hacia);
 	printf("Post ult %d \n", pos_ult);
+	printf("Cabeza Pila %d\n",cabeza_pila);
 	ruta(hacia);
 	
   return 0;
@@ -97,31 +99,37 @@ int unidas (char *desde, char *hacia){
 int encuentra(char *desde, char *cualquier_lugar){
 	encuentra_pos = 0;
 	while( encuentra_pos < pos_ult ){
+		printf("Encuentra %d pos ultima %d\n", encuentra_pos, pos_ult);
 		if(!strcmp(vuelos[encuentra_pos].desde, desde)&& !vuelos[encuentra_pos].visitado){
 			strcpy(cualquier_lugar, vuelos[encuentra_pos].hacia);
 			vuelos[encuentra_pos].visitado = 1;
 			return vuelos[encuentra_pos].distancia;
 		}
-		encuentra_pos++;
+		encuentra_pos = encuentra_pos + 1;
 	}
 	return 0;
 }
 //Determina si hay una ruta entre desde y distancia
 void hay_vuelo(char *desde, char *hacia){
-	static int d, dist;
+	int d, dist;
 	char cualquier_lugar[20];
 	if(d == unidas(desde, hacia)){
+		printf("entre por union\n");
 		mete_pila(desde, hacia, d);
 		return;
 	}
 	if( dist == encuentra(desde, cualquier_lugar)){
+		printf("entre por distancia\n");
 		mete_pila(desde, hacia, d);
 		hay_vuelo(cualquier_lugar, hacia);
 	}
-	else if (cabeza_pila>0){
+	else 
+		if (cabeza_pila>0){
+		printf("entre por cabeza pila\n");
 		saca_pila(desde, hacia, &dist);
 		hay_vuelo(desde, hacia);
 	}
+		printf("No hay vuelo\n");
 }
 //Rutinas de pila
 void mete_pila(char *desde, char *hacia, int dist){
