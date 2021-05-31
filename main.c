@@ -7,8 +7,8 @@ struct VL{
 	char hacia[20];
 	int distancia;
 	char visitado;
-} vuelos [MAX]; // Array de estructura de la bd
-
+}; // Array de estructura de la bd
+struct VL vuelos[MAX];
 int pos_ult=0; // numero de entradas en la bd vuelos
 int encuentra_pos = 0; // indice de busqueda en la bd vuelos
 int cabeza_pila = 0; // ultima posicion de la pila
@@ -17,7 +17,8 @@ struct pila{
 	char desde[20];
 	char hacia[20];
 	int dist;
-} pila_rt[MAX]; // pila de rutas de vuelos
+}; // pila de rutas de vuelos
+struct pila pila_rt[MAX];
 void inicia();
 void ruta(char *hacia);
 int unidas (char *desde, char *hacia);
@@ -28,20 +29,25 @@ void mete_pila(char *desde, char *hacia, int dist);
 void saca_pila(char *desde, char *hacia, int *dist);
 
 int main(void) {
-  printf("Hello World\n");
 	char desde[20], hacia[20];
+
 	printf("Desde? = ");
 	gets(desde);
 	printf("Hacia? = ");
 	gets(hacia);
+
+	inicia();
+	printf("Post ult %d \n", pos_ult);
 	hay_vuelo(desde,hacia);
+	printf("Post ult %d \n", pos_ult);
 	ruta(hacia);
+	
   return 0;
 }
 //Colocar data dentro de la BD vuelos
 void declara_vuelo(char *desde, char *hacia, int dist){
 	if(pos_ult<MAX){
-		strcpy(vuelos[pos_ult]. desde, desde);
+		strcpy(vuelos[pos_ult].desde, desde);
 		strcpy(vuelos[pos_ult].hacia, hacia);
 		vuelos[pos_ult].distancia = dist;
 		vuelos[pos_ult].visitado = 0;
@@ -69,12 +75,12 @@ void ruta(char *hacia){
 	int dist = 0;
 	int t = 0;
 	while(t<cabeza_pila) {
-		printf ("%s hacia", pila_rt[t].desde);
+		printf ("%s hacia ", pila_rt[t].desde);
 		dist+=pila_rt[t].dist;
+		t++;
 	}
 	printf("%s\n", hacia);
 	printf("La distancia es: %d\n", dist);
-	t++;
 }
 
 /* SI HAY CONEXIÓN ENTRE DESDE Y HACIA, ENTONCES DEVUELVE LA
@@ -102,7 +108,7 @@ int encuentra(char *desde, char *cualquier_lugar){
 }
 //Determina si hay una ruta entre desde y distancia
 void hay_vuelo(char *desde, char *hacia){
-	int d, dist;
+	static int d, dist;
 	char cualquier_lugar[20];
 	if(d == unidas(desde, hacia)){
 		mete_pila(desde, hacia, d);
@@ -124,11 +130,13 @@ void mete_pila(char *desde, char *hacia, int dist){
 		strcpy(pila_rt[cabeza_pila].hacia, hacia);
 		pila_rt[cabeza_pila].dist = dist;
 		cabeza_pila++;
+		printf("Mete pila cabeza pila %d", cabeza_pila);
 	}
 	else printf("Pila llena \n");
 }
 
 void saca_pila(char *desde, char *hacia, int *dist){
+	printf("Saca pila cabeza pila %d", cabeza_pila);
 	if (cabeza_pila > 0){
 		cabeza_pila--;
 		strcpy(desde, pila_rt[cabeza_pila].desde);
