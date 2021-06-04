@@ -107,18 +107,19 @@ int encuentra(char *desde, char *cualquier_lugar){
 }
 //Determina si hay una ruta entre desde y distancia
 void hay_vuelo(char *desde, char *hacia){
-	int d, dist;
+	int d, temp, dist;
 	char cualquier_lugar[20];
-	if((d = unidas(desde, hacia))){
-		mete_pila(desde, hacia, d);
-		return;
+	while((dist = encuentra(desde, cualquier_lugar))){
+		if((d = unidas(cualquier_lugar, hacia))){
+			mete_pila(desde, hacia, dist);
+			mete_pila(cualquier_lugar, hacia, d);
+			return;
+		}
 	}
-	if((dist = encuentra(desde, cualquier_lugar))){
+	if ((dist = encuentra(desde, cualquier_lugar))){
 		mete_pila(desde, hacia, dist);
 		hay_vuelo(cualquier_lugar, hacia);
-	}
-	else 
-		if (cabeza_pila>0){
+	}else if(cabeza_pila > 0){
 		saca_pila(desde, hacia, &dist);
 		hay_vuelo(desde, hacia);
 	}
