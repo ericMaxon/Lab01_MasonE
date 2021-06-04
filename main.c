@@ -116,13 +116,6 @@ void hay_vuelo(char *desde, char *hacia){
 			return;
 		}
 	}
-	if ((dist = encuentra(desde, cualquier_lugar))){
-		mete_pila(desde, hacia, dist);
-		hay_vuelo(cualquier_lugar, hacia);
-	}else if(cabeza_pila > 0){
-		saca_pila(desde, hacia, &dist);
-		hay_vuelo(desde, hacia);
-	}
 }
 //Rutinas de pila
 void mete_pila(char *desde, char *hacia, int dist){
