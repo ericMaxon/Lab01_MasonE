@@ -94,27 +94,42 @@ int unidas (char *desde, char *hacia){
 } /* no encontrado */
 /* DADO UN DESDE, ENCUENTRA CUALQUIER_LUGAR */
 int encuentra(char *desde, char *cualquier_lugar){
+	int pos, dist;
+	pos = dist = 0;
 	encuentra_pos = 0;
+
 	while( encuentra_pos < pos_ult ){
 		if(!strcmp(vuelos[encuentra_pos].desde, desde)&& !vuelos[encuentra_pos].visitado){
-			strcpy(cualquier_lugar, vuelos[encuentra_pos].hacia);
-			vuelos[encuentra_pos].visitado = 1;
-			return vuelos[encuentra_pos].distancia;
+			if(vuelos[encuentra_pos].distancia > dist){
+				pos = encuentra_pos;
+				dist = vuelos[encuentra_pos].distancia;
+			}
 		}
-		encuentra_pos = encuentra_pos + 1;
+		encuentra_pos++;
+	}
+	if(pos){
+		strcpy(cualquier_lugar, vuelos[encuentra_pos].hacia);
+		vuelos[encuentra_pos].visitado = 1;
+		return vuelos[encuentra_pos].distancia;
 	}
 	return 0;
 }
 //Determina si hay una ruta entre desde y distancia
 void hay_vuelo(char *desde, char *hacia){
-	int d, temp, dist;
+	int d, dist;
 	char cualquier_lugar[20];
-	while((dist = encuentra(desde, cualquier_lugar))){
-		if((d = unidas(cualquier_lugar, hacia))){
-			mete_pila(desde, hacia, dist);
-			mete_pila(cualquier_lugar, hacia, d);
-			return;
-		}
+	if((d = unidas(desde, hacia))){
+		mete_pila(desde, hacia, d);
+		return;
+	}
+	if((dist = encuentra(desde, cualquier_lugar))){
+		mete_pila(desde, hacia, dist);
+		hay_vuelo(cualquier_lugar, hacia);
+	}
+	else 
+		if (cabeza_pila>0){
+		saca_pila(desde, hacia, &dist);
+		hay_vuelo(desde, hacia);
 	}
 }
 //Rutinas de pila
