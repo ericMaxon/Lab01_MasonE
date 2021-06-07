@@ -95,13 +95,12 @@ int unidas (char *desde, char *hacia){
 /* DADO UN DESDE, ENCUENTRA CUALQUIER_LUGAR */
 int encuentra(char *desde, char *cualquier_lugar){
 	int pos, dist;
-	pos = 0;
-	dist = 32000;
+	pos = dist = 0;
 	encuentra_pos = 0;
 
-	while(encuentra_pos < pos_ult ){
+	while( encuentra_pos < pos_ult ){
 		if(!strcmp(vuelos[encuentra_pos].desde, desde)&& !vuelos[encuentra_pos].visitado){
-			if(vuelos[encuentra_pos].distancia < dist){
+			if(vuelos[encuentra_pos].distancia > dist){
 				pos = encuentra_pos;
 				dist = vuelos[encuentra_pos].distancia;
 			}
