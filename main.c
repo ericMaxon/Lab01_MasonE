@@ -30,7 +30,7 @@ void saca_pila(char *desde, char *hacia, int *dist);
 
 int main(void) {
 	char desde[20], hacia[20];
-	
+	printf("Mason, Eric 1IL132\n");
 	inicia();
 
 	printf("Desde? = ");
