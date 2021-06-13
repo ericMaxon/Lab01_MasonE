@@ -40,7 +40,7 @@ int main(void) {
 
 	hay_vuelo(desde,hacia);
 	ruta(hacia);
-	
+	printf("Eric Mason del 1IL132 en repl.it");
   return 0;
 }
 //Colocar data dentro de la BD vuelos
@@ -110,19 +110,23 @@ int encuentra(char *desde, char *cualquier_lugar){
 void hay_vuelo(char *desde, char *hacia){
 	int d, dist;
 	char cualquier_lugar[20];
-	if((d = unidas(desde, hacia))){
-		mete_pila(desde, hacia, d);
-		return;
+	static int limite = 0;
+	while(limite < pos_ult){
+		if((d = unidas(desde, hacia))){
+			mete_pila(desde, hacia, d);
+			limite++;
+		}
+		if((dist = encuentra(desde, cualquier_lugar))){
+			mete_pila(desde, hacia, dist);
+			hay_vuelo(cualquier_lugar, hacia);
+		}
+		else 
+			if (cabeza_pila>0){
+			saca_pila(desde, hacia, &dist);
+			hay_vuelo(desde, hacia);
+		}
 	}
-	if((dist = encuentra(desde, cualquier_lugar))){
-		mete_pila(desde, hacia, dist);
-		hay_vuelo(cualquier_lugar, hacia);
-	}
-	else 
-		if (cabeza_pila>0){
-		saca_pila(desde, hacia, &dist);
-		hay_vuelo(desde, hacia);
-	}
+	return;
 }
 //Rutinas de pila
 void mete_pila(char *desde, char *hacia, int dist){
