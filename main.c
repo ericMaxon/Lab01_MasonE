@@ -40,7 +40,7 @@ int main(void) {
 
 	hay_vuelo(desde,hacia);
 	ruta(hacia);
-	printf("Eric Mason del 1IL132 en repl.it");
+	printf("Eric Mason del 1IL132 en repl.it\n");
   return 0;
 }
 //Colocar data dentro de la BD vuelos
