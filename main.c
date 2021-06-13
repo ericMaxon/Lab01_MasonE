@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #define MAX 100
+#define MAX_CHAR 20
+
 // Esctructura de la base de datos vuelos
 struct VL{
-	char desde[20];
-	char hacia[20];
+	char desde[MAX_CHAR];
+	char hacia[MAX_CHAR];
 	int distancia;
 	char visitado;
 }; // Array de estructura de la bd
@@ -14,10 +16,13 @@ int encuentra_pos = 0; // indice de busqueda en la bd vuelos
 int cabeza_pila = 0; // ultima posicion de la pila
 
 struct pila{
-	char desde[20];
-	char hacia[20];
+	char desde[MAX_CHAR];
+	char hacia[MAX_CHAR];
 	int dist;
 }; // pila de rutas de vuelos
+char desde_Global[MAX_CHAR];
+char hacia_Global[MAX_CHAR];
+
 struct pila pila_rt[MAX];
 void inicia();
 void ruta(char *hacia);
@@ -29,7 +34,7 @@ void mete_pila(char *desde, char *hacia, int dist);
 void saca_pila(char *desde, char *hacia, int *dist);
 
 int main(void) {
-	char desde[20], hacia[20];
+	char desde[MAX_CHAR], hacia[MAX_CHAR];
 	
 	inicia();
 
@@ -37,7 +42,8 @@ int main(void) {
 	gets(desde);
 	printf("Hacia? = ");
 	gets(hacia);
-
+	strcpy(desde_Global, desde);
+	strcpy(hacia_Global, hacia);
 	hay_vuelo(desde,hacia);
 	ruta(hacia);
 	printf("Eric Mason del 1IL132 en repl.it\n");
@@ -109,11 +115,14 @@ int encuentra(char *desde, char *cualquier_lugar){
 //Determina si hay una ruta entre desde y distancia
 void hay_vuelo(char *desde, char *hacia){
 	int d, dist;
-	char cualquier_lugar[20];
+	char cualquier_lugar[MAX_CHAR];
 	static int limite = 0;
+	char buffer[MAX_CHAR + 10];
 	while(limite < pos_ult){
 		if((d = unidas(desde, hacia))){
 			mete_pila(desde, hacia, d);
+			strcpy(desde, desde_Global);
+			strcpy(hacia, hacia_Global);
 			limite++;
 		}
 		if((dist = encuentra(desde, cualquier_lugar))){
@@ -126,7 +135,6 @@ void hay_vuelo(char *desde, char *hacia){
 			hay_vuelo(desde, hacia);
 		}
 	}
-	return;
 }
 //Rutinas de pila
 void mete_pila(char *desde, char *hacia, int dist){
