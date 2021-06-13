@@ -43,6 +43,7 @@ int main(void) {
 		ruta(hacia);
 		cabeza_pila=0;
 	}
+	printf("Eric Mason del 1IL132 en replit.com\n");
   return 0;
 }
 //Colocar data dentro de la BD vuelos
@@ -75,13 +76,16 @@ void inicia(){
 void ruta(char *hacia){
 	int dist = 0;
 	int t = 0;
+
 	while(t<cabeza_pila) {
-		printf ("%s hacia ", pila_rt[t].desde);
 		dist += pila_rt[t].dist;
+		printf ("%s hacia ", pila_rt[t].desde);
 		t++;
 	}
+	if(dist!=0){
 	printf("%s\n", hacia);
 	printf("La distancia es: %d\n", dist);
+	}
 }
 
 /* SI HAY CONEXIÓN ENTRE DESDE Y HACIA, ENTONCES DEVUELVE LA
