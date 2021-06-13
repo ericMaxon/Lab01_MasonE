@@ -30,7 +30,7 @@ void saca_pila(char *desde, char *hacia, int *dist);
 
 int main(void) {
 	char desde[20], hacia[20];
-	printf("Mason, Eric 1IL132\n");
+	
 	inicia();
 
 	printf("Desde? = ");
@@ -59,15 +59,15 @@ void declara_vuelo(char *desde, char *hacia, int dist){
 void inicia(){
 	declara_vuelo("Panama", "Cocle", 1000);
 	declara_vuelo("Cocle", "Veraguas", 1000);
+	declara_vuelo("Veraguas", "Chiriqui", 1000);
 	declara_vuelo("Panama", "Colon", 800);
-	declara_vuelo("Panama", "Veraguas", 1900);
-	declara_vuelo("Colon", "Bocas del Toro", 1500);
 	declara_vuelo("Colon", "Chiriqui", 1800);
-	declara_vuelo("Colon", "Cocle", 500);
-	declara_vuelo("Veraguas", "Herrera", 1000);
+	declara_vuelo("Panama", "Veraguas", 1900);
 	declara_vuelo("Veraguas", "Los Santos", 1500);
 	declara_vuelo("Los Santos", "Chiriqui", 1500);
-	declara_vuelo("Veraguas", "Chiriqui", 1000);
+	declara_vuelo("Colon", "Bocas del Toro", 1500);
+	declara_vuelo("Colon", "Cocle", 500);
+	declara_vuelo("Veraguas", "Herrera", 1000);
 }
 //Muestra la ruta y la distancia
 void ruta(char *hacia){
@@ -86,31 +86,23 @@ void ruta(char *hacia){
 DISTANCIA DEL VUELO. SI NO, DEVUELVEO */
 int unidas (char *desde, char *hacia){
 	register int t;
-	for (t=pos_ult-1;t>-1;t--){
-		if (!strcmp(vuelos[t].desde,desde) && !strcmp(vuelos[t].hacia,hacia))
+
+	for (t = pos_ult - 1; t > -1; t--){
+		if (!strcmp(vuelos[t].desde, desde) && !strcmp(vuelos[t].hacia, hacia))
 			return vuelos[t].distancia;
 	}
 	return 0;
 } /* no encontrado */
 /* DADO UN DESDE, ENCUENTRA CUALQUIER_LUGAR */
 int encuentra(char *desde, char *cualquier_lugar){
-	int pos, dist;
-	pos = dist = 0;
 	encuentra_pos = 0;
-
 	while( encuentra_pos < pos_ult ){
-		if(!strcmp(vuelos[encuentra_pos].desde, desde)&& !vuelos[encuentra_pos].visitado){
-			if(vuelos[encuentra_pos].distancia > dist){
-				pos = encuentra_pos;
-				dist = vuelos[encuentra_pos].distancia;
-			}
+		if(!strcmp(vuelos[encuentra_pos].desde, desde) && !vuelos[encuentra_pos].visitado){
+			strcpy(cualquier_lugar, vuelos[encuentra_pos].hacia);
+			vuelos[encuentra_pos].visitado = 1;
+			return vuelos[encuentra_pos].distancia;
 		}
-		encuentra_pos++;
-	}
-	if(pos){
-		strcpy(cualquier_lugar, vuelos[pos].hacia);
-		vuelos[pos].visitado = 1;
-		return vuelos[pos].distancia;
+		encuentra_pos = encuentra_pos + 1;
 	}
 	return 0;
 }
