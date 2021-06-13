@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #define MAX 100
-#define MAX_CHAR 20
-
 // Esctructura de la base de datos vuelos
 struct VL{
-	char desde[MAX_CHAR];
-	char hacia[MAX_CHAR];
+	char desde[20];
+	char hacia[20];
 	int distancia;
 	char visitado;
 }; // Array de estructura de la bd
@@ -16,13 +14,11 @@ int encuentra_pos = 0; // indice de busqueda en la bd vuelos
 int cabeza_pila = 0; // ultima posicion de la pila
 
 struct pila{
-	char desde[MAX_CHAR];
-	char hacia[MAX_CHAR];
+	char desde[20];
+	char hacia[20];
 	int dist;
 }; // pila de rutas de vuelos
-char desde_Global[MAX_CHAR];
-char hacia_Global[MAX_CHAR];
-
+int encontrados = 1;
 struct pila pila_rt[MAX];
 void inicia();
 void ruta(char *hacia);
@@ -34,7 +30,7 @@ void mete_pila(char *desde, char *hacia, int dist);
 void saca_pila(char *desde, char *hacia, int *dist);
 
 int main(void) {
-	char desde[MAX_CHAR], hacia[MAX_CHAR];
+	char desde[20], hacia[20];
 	
 	inicia();
 
@@ -42,11 +38,11 @@ int main(void) {
 	gets(desde);
 	printf("Hacia? = ");
 	gets(hacia);
-	strcpy(desde_Global, desde);
-	strcpy(hacia_Global, hacia);
-	hay_vuelo(desde,hacia);
-	ruta(hacia);
-	printf("Eric Mason del 1IL132 en repl.it\n");
+	for(int n = 0; n < encontrados; ++n){
+		hay_vuelo(desde,hacia);
+		ruta(hacia);
+		cabeza_pila=0;
+	}
   return 0;
 }
 //Colocar data dentro de la BD vuelos
@@ -65,15 +61,15 @@ void declara_vuelo(char *desde, char *hacia, int dist){
 void inicia(){
 	declara_vuelo("Panama", "Cocle", 1000);
 	declara_vuelo("Cocle", "Veraguas", 1000);
-	declara_vuelo("Veraguas", "Chiriqui", 1000);
 	declara_vuelo("Panama", "Colon", 800);
-	declara_vuelo("Colon", "Chiriqui", 1800);
 	declara_vuelo("Panama", "Veraguas", 1900);
-	declara_vuelo("Veraguas", "Los Santos", 1500);
-	declara_vuelo("Los Santos", "Chiriqui", 1500);
 	declara_vuelo("Colon", "Bocas del Toro", 1500);
+	declara_vuelo("Colon", "Chiriqui", 1800);
 	declara_vuelo("Colon", "Cocle", 500);
 	declara_vuelo("Veraguas", "Herrera", 1000);
+	declara_vuelo("Veraguas", "Los Santos", 1500);
+	declara_vuelo("Los Santos", "Chiriqui", 1500);
+	declara_vuelo("Veraguas", "Chiriqui", 1000);
 }
 //Muestra la ruta y la distancia
 void ruta(char *hacia){
@@ -92,9 +88,8 @@ void ruta(char *hacia){
 DISTANCIA DEL VUELO. SI NO, DEVUELVEO */
 int unidas (char *desde, char *hacia){
 	register int t;
-
-	for (t = pos_ult - 1; t > -1; t--){
-		if (!strcmp(vuelos[t].desde, desde) && !strcmp(vuelos[t].hacia, hacia))
+	for (t=pos_ult-1;t>-1;t--){
+		if (!strcmp(vuelos[t].desde,desde) && !strcmp(vuelos[t].hacia,hacia))
 			return vuelos[t].distancia;
 	}
 	return 0;
@@ -103,7 +98,7 @@ int unidas (char *desde, char *hacia){
 int encuentra(char *desde, char *cualquier_lugar){
 	encuentra_pos = 0;
 	while( encuentra_pos < pos_ult ){
-		if(!strcmp(vuelos[encuentra_pos].desde, desde) && !vuelos[encuentra_pos].visitado){
+		if(!strcmp(vuelos[encuentra_pos].desde, desde)&& !vuelos[encuentra_pos].visitado){
 			strcpy(cualquier_lugar, vuelos[encuentra_pos].hacia);
 			vuelos[encuentra_pos].visitado = 1;
 			return vuelos[encuentra_pos].distancia;
@@ -115,25 +110,20 @@ int encuentra(char *desde, char *cualquier_lugar){
 //Determina si hay una ruta entre desde y distancia
 void hay_vuelo(char *desde, char *hacia){
 	int d, dist;
-	char cualquier_lugar[MAX_CHAR];
-	static int limite = 0;
-	char buffer[MAX_CHAR + 10];
-	while(limite < pos_ult){
-		if((d = unidas(desde, hacia))){
-			mete_pila(desde, hacia, d);
-			strcpy(desde, desde_Global);
-			strcpy(hacia, hacia_Global);
-			limite++;
-		}
-		if((dist = encuentra(desde, cualquier_lugar))){
-			mete_pila(desde, hacia, dist);
-			hay_vuelo(cualquier_lugar, hacia);
-		}
-		else 
-			if (cabeza_pila>0){
-			saca_pila(desde, hacia, &dist);
-			hay_vuelo(desde, hacia);
-		}
+	char cualquier_lugar[20];
+	if((d = unidas(desde, hacia))){
+		mete_pila(desde, hacia, d);
+		encontrados++;
+		return;
+	}
+	if((dist = encuentra(desde, cualquier_lugar))){
+		mete_pila(desde, hacia, dist);
+		hay_vuelo(cualquier_lugar, hacia);
+	}
+	else 
+		if (cabeza_pila>0){
+		saca_pila(desde, hacia, &dist);
+		hay_vuelo(desde, hacia);
 	}
 }
 //Rutinas de pila
